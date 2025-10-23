@@ -818,4 +818,4 @@
 !
   999 Continue
       write(iOut,8999)
-      end program nio
+      end program ddno

@@ -1,0 +1,5 @@
+%oldchk=test101b
+%chk=test101b-corbs
+#p test uhf geom=allcheck guess(read,biorthog,save,only)
+
+

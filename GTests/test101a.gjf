@@ -1,0 +1,10 @@
+%chk=test101a
+#p test uhf geom=modela output=mat
+
+Formaldehyde ground state calc.
+
+0 1
+c h h o
+
+test101a.mat
+

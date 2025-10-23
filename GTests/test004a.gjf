@@ -1,0 +1,13 @@
+%chk=test004a
+#p test uhf aug-cc-pvdz output=mat
+
+Test calculation for the NIO program on H2...H2 dimer.
+
+0  1
+H      0.0   0.0   0.0
+H      0.0   0.0   0.7
+H      2.0   0.0   0.0
+H      2.0   0.0   0.7
+
+test004a.mat
+

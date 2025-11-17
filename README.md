@@ -68,10 +68,11 @@ ddno.exe initial.faf final.faf ddno_output.faf
 DDNO writes computed orbitals and related data to `ddno_output.faf`, which can be converted to a Gaussian formatted checkpoint file for visualization (e.g., GaussView, iQMol):
 
 ```bash
-unfchk ddno_output.faf ddno_output.fchk
+unfchk -faf ddno_output.faf ddno_output.chk
+formchk ddno_output.chk ddno_output.fchk
 ```
 
-You may then visualize the DDNOs using the viewer of your choice.
+You may then visualize the DDNOs using GaussView, iQMol, or another standard visualizer of your choice.
 
 ---
 
@@ -109,3 +110,44 @@ The program determines whether the initial and final states contain the same num
 
 This unified behavior replaces earlier workflows that required separate programs (`nio.exe`) for non‑conserving transitions.
 
+---
+
+## 4. References
+
+If you use DDNO or NIO analyses in published work, please cite the appropriate foundational references:
+
+* **DDNO Model** (Difference Density Natural Orbitals):
+  *A. J. Bovill, A. Abou Taka, H. Harb, and H. P. Hratchian.*
+  *Excitation/Relaxation Analysis of Electronic Transitions Using Difference Density Natural Orbitals.*
+  ChemRxiv preprint available at [https://doi.org/10.26434/chemrxiv-2025-d34wd-v2](https://doi.org/10.26434/chemrxiv-2025-d34wd-v2).
+
+* **Natural Ionization Orbitals (NIOs):**
+
+  * *L. M. Thompson, H. Harb, and H. P. Hratchian.*
+    *Natural Ionization Orbitals for interpreting electron detachment processes.*
+    J. Chem. Phys. **144**, 204117 (2016).
+
+  * *H. Harb and H. P. Hratchian.*
+    *ΔSCF Dyson Orbitals and Pole Strengths From Natural Ionization Orbitals.*
+    J. Chem. Phys. **154**, 084104 (2021).
+
+* **Attachment/Detachment (A/D) Model:**
+
+  * *M. Head‑Gordon, A. M. Graña, D. Maurice, and C. A. White.*
+    *Analysis of electronic transitions as the difference of electron attachment and detachment densities.*
+    J. Phys. Chem. **99**, 14261–14270 (1995).
+
+* **Excitation Number Model:**
+
+  * *G. M. Barca, A. T. B. Gilbert, and P. M. W. Gill.*
+    *Excitation number: Characterizing multiply excited states.*
+    J. Chem. Theory Comput. **14**, 9–13 (2018).
+
+---
+
+## 5. License
+
+This project is distributed under the **MIT License**.
+The full license text is available at:
+
+[https://github.com/HratchianGroup/ddno/blob/main/LICENSE](https://github.com/HratchianGroup/ddno/blob/main/LICENSE)

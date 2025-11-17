@@ -8,11 +8,10 @@ The **DDNO program** computes Difference Density Natural Orbitals and related qu
 
 ### Requirements
 
-* **Supported Fortran compilers**:
+* **Supported Fortran compilers (Other compilers are not supported.):**
 
   * `gfortran`
   * `nvfortran`
-    *(Other compilers are not supported.)*
 
 * **MQCPack Fortran (f03) library**
   Available at: [https://github.com/MQCPack](https://github.com/MQCPack)

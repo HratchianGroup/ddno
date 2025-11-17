@@ -1,6 +1,8 @@
 # DDNO
 
-The **DDNO program** computes Difference Density Natural Orbitals and related quantities from pairs of electronic-state density matrices. It provides a unified framework for analyzing electron‑conserving and non‑conserving transitions, automatically performing DDNO, NIO, Attachment/Detachment, and Excitation‑Number analyses as appropriate. The program works directly with Fortran Array Files (FAFs) and supports orbital visualization through standard quantum‑chemistry tools.
+The **DDNO program** computes Difference Density Natural Orbitals and related quantities from pairs of electronic-state density matrices. It supersedes the earlier **NIO** repository ([https://github.com/HratchianGroup/nio](https://github.com/HratchianGroup/niorep)) and incorporates its functionality under the same MIT License.
+
+The **DDNO program**** computes Difference Density Natural Orbitals and related quantities from pairs of electronic-state density matrices. It provides a unified framework for analyzing electron‑conserving and non‑conserving transitions, automatically performing DDNO, NIO, Attachment/Detachment, and Excitation‑Number analyses as appropriate. The program works directly with Fortran Array Files (FAFs) and supports orbital visualization through standard quantum‑chemistry tools.
 
 ---
 

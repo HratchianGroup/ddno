@@ -2,28 +2,35 @@
 
 ## 1. Project Overview
 
-**DDNO** (Difference Density Natural Orbitals) is a modern orbital analysis tool designed for interpreting **electron-conserving electronic transitions**, including ΔSCF excited states, charge-transfer processes, and state-specific density differences. DDNO generalizes the **Natural Ionization Orbital (NIO)** model of electron detachment/attachment to processes where the total number of electrons remains fixed, providing a unified, density-based picture of electronic rearrangement.
+**DDNO** (Difference Density Natural Orbitals) is an orbital-based analysis tool designed for interpreting electron-conserving electronic transitions, including ΔSCF excited states, charge-transfer processes, and state-specific density differences. DDNO generalizes the Natural Ionization Orbital (NIO) model of electron detachment/attachment to processes where the total number of electrons remains fixed, providing a unified, density-based picture of electronic rearrangement.
 
 The DDNO model:
 
-* Constructs the **difference density**
+* Constructs the difference density
   ΔP = P_f − P_i
   between initial and final states.
-* Performs a **Löwdin natural orbital decomposition** of the difference density.
+* Performs a Löwdin natural orbital decomposition of the difference density.
 * Produces orbitals that fall naturally into:
 
-  * **Particle (δ ≈ +1)** orbitals
-  * **Hole (δ ≈ −1)** orbitals
-  * **Relaxation (0 < |δ| < 1)** orbital pairs
-  * **δ = 0** orbitals that do not contribute to the transition
-* Decomposes the difference density into **excitation** and **relaxation** contributions:
+  * Particle (δ ≈ +1) orbitals
+  * Hole (δ ≈ −1) orbitals
+  * Relaxation (0 < |δ| < 1) orbital pairs
+  * δ = 0 orbitals that do not contribute to the transition
+* Decomposes the difference density into excitation and relaxation contributions:
   ΔP = X + R
-* Computes **excitation number** (n_x) and **relaxation number** (n_r), which quantify the many-electron character of the transition.
+* Computes excitation number (n_x) and relaxation number (n_r), which quantify the many-electron character of the transition.
 
-This repository contains the complete DDNO implementation (`ddno.exe`). The program automatically detects whether the initial and final states have the same number of electrons:
+In addition to DDNO and NIO analyses, the program also evaluates two widely used related models when appropriate:
 
-* If the electron count **is conserved**, DDNO performs the general **DDNO analysis**.
-* If the electron count **changes**, the program automatically performs an **NIO analysis** following established methods.
+* Attachment/Detachment model of Head-Gordon and co‑workers, which partitions the difference density into attachment and detachment components and reports the associated promotion number.
+* Excitation Number model of Gill and co‑workers, providing an alternative scalar measure of electron promotion based on the ΔSCF density‑difference framework.
+
+These analyses are automatically computed when the required conditions (electron‑conserving transitions for A/D and excitation‑number models) are met.
+
+This repository contains the complete DDNO implementation (`ddno.exe`). The program evaluates whether the initial and final states have the same number of electrons: (`ddno.exe`). The program evaluates whether the initial and final states have the same number of electrons:
+
+* If the electron count is conserved, the program performs the general DDNO analysis.
+* If the electron count changes, the program performs an NIO analysis.
 
 This unified behavior replaces earlier workflows that required separate programs (`nio.exe`) for non-conserving transitions.
 

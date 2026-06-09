@@ -1,8 +1,9 @@
       module ddno_mod
 !
-!     This module supports the program ddno.
+!     Core routines for DDNO/NIO analysis, determinant overlaps, and density
+!     partitioning.
 !
-!     -H. P. Hratchian, 2022.
+!     -H. P. Hratchian, 2022-2026.
 !
 !
 !     USE Connections

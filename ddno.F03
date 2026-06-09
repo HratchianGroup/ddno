@@ -1,8 +1,9 @@
       program ddno
 !
-!     This program carries out Natural Ionization Orbital analysis.
+!     This program carries out DDNO/NIO analysis of pairs of electronic-state
+!     density matrices.
 !
-!     -H. P. Hratchian, 2022.
+!     -H. P. Hratchian, 2022-2026.
 !
 !
 !     USE Connections

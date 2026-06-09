@@ -2,7 +2,7 @@
 
 The **DDNO program** computes Difference Density Natural Orbitals and related quantities from pairs of electronic-state density matrices. It supersedes the earlier **NIO** repository ([https://github.com/HratchianGroup/nio](https://github.com/HratchianGroup/niorep)) and incorporates its functionality under the same MIT License.
 
-The **DDNO program**** computes Difference Density Natural Orbitals and related quantities from pairs of electronic-state density matrices. It provides a unified framework for analyzing electron‑conserving and non‑conserving transitions, automatically performing DDNO, NIO, Attachment/Detachment, and Excitation‑Number analyses as appropriate. The program works directly with Fortran Array Files (FAFs) and supports orbital visualization through standard quantum‑chemistry tools.
+DDNO provides a unified framework for analyzing electron-conserving and non-conserving transitions, automatically performing DDNO, NIO, Attachment/Detachment, and Excitation-Number analyses as appropriate. The program works directly with Fortran Array Files (FAFs) and supports orbital visualization through standard quantum-chemistry tools.
 
 ---
 
@@ -17,6 +17,7 @@ The **DDNO program**** computes Difference Density Natural Orbitals and related 
 
 * **MQCPack Fortran (f03) library**
   Available at: [https://github.com/MQCPack](https://github.com/MQCPack)
+  The installed MQCPack compiler flavor must match the compiler used to build DDNO.
 
 * **BLAS/LAPACK** libraries
 
@@ -25,6 +26,7 @@ The **DDNO program**** computes Difference Density Natural Orbitals and related 
 ```bash
 git clone https://github.com/HratchianGroup/ddno
 cd ddno
+export mqcinstall=/path/to/mqcPack
 make
 ```
 
@@ -33,6 +35,10 @@ This produces the main executable:
 ```
 ddno.exe
 ```
+
+The makefile defaults to `nvfortran`; switch `FC` to `gfortran` near the top of
+the makefile if that is your local compiler. DDNO currently checks for MQCPack
+version 25.9.0 or newer at runtime.
 
 ---
 
@@ -48,6 +54,10 @@ ddno.exe initial.faf final.faf
 
 * `initial.faf` — AO‑basis density matrix for the initial electronic state
 * `final.faf` — AO‑basis density matrix for the final electronic state
+
+The two FAFs must describe the same molecule in the same AO basis. DDNO checks
+that the atom count, basis dimensions, basis-use dimensions, and coordinates
+match before proceeding.
 
 DDNO will:
 
@@ -74,6 +84,21 @@ formchk ddno_output.chk ddno_output.fchk
 ```
 
 You may then visualize the DDNOs using GaussView, iQMol, or another standard visualizer of your choice.
+
+The output FAF contains reordered DDNO orbitals, orbital-energy-like occupation-change eigenvalues, and the relevant copied basis/density metadata needed for visualization.
+
+### Example inputs and regression cases
+
+The `GTests/` directory contains small Gaussian input examples that were used to
+validate the program and exercise the DDNO/NIO workflows. A few representative
+cases are:
+
+* `GTests/test001a.gjf` and `GTests/test001b.gjf`
+* `GTests/test002.gjf`, `GTests/test002a.gjf`, and `GTests/test002b.gjf`
+* `GTests/test101a.gjf`, `GTests/test101b.gjf`, and `GTests/test101b-corbs.gjf`
+
+These files are a good starting point if you want to generate FAF inputs with
+Gaussian before running `ddno.exe`.
 
 ---
 
@@ -109,7 +134,11 @@ The program determines whether the initial and final states contain the same num
 * If the electron count **is conserved**, DDNO performs the general **DDNO analysis**.
 * If the electron count **changes**, DDNO performs **NIO analysis**.
 
-This unified behavior replaces earlier workflows that required separate programs (`nio.exe`) for non‑conserving transitions.
+This unified behavior replaces earlier workflows that required separate programs (`nio.exe`) for non-conserving transitions.
+
+For electron-conserving jobs, DDNO also reports the transition dipole, dipole
+strength, and oscillator-strength-related quantities. Those terms are not
+computed for NIO-style detachment jobs.
 
 ---
 

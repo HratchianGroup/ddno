@@ -32,6 +32,7 @@
         matrixFilenameOut
       type(mqc_gaussian_unformatted_matrix_file)::GMatrixFile1,  &
         GMatrixFile2,GMatrixFileOut
+      type(MQC_Variable)::ddnoMetaDataIntsLabels,ddnoMetaDataInts
       type(MQC_Variable)::DDNOsAlpha,DDNOsBeta,pDDNO,hDDNO,  &
         dipoleStrength,TDOverlapA,TDOverlapB,TDparticleHoleMag,  &
         oscillatorStrength
@@ -123,14 +124,18 @@
 !     Do a check of the mqcPack version the program was built against to ensure
 !     it's a supported version.
 !
-      if(.not.mqc_version_check(newerThanMajor=25,newerThanMinor=9,  &
-        newerThanRevision=0)) then
+      if(.not.mqc_version_check(newerThanMajor=26,newerThanMinor=7,  &
+        newerThanRevision=1)) then
         write(iOut,9000)
         goto 999
       endIf
 !
+!     Set up the metadata arrays.
+!
+      call ddnoMetaData(ddnoMetaDataIntsLabels,ddnoMetaDataInts)
+!
 !     Open the Gaussian matrix file and load the number of atomic centers.
-
+!
       nCommands = command_argument_count()
       if(nCommands.lt.2)  &
         call mqc_error('Two input Gaussian matrix files must be provided in the command line.')
@@ -427,6 +432,10 @@
         call mqc_error('Confused about NIO or DDNO job.')
       if(isNIO) write(iOut,1500) float(TDOverlapA*TDOverlapB),  &
         float(TDOverlapA),float(TDOverlapB)
+      call ddnoMetaDataInts%put(nPlusOneAlpha,[5])
+      call ddnoMetaDataInts%put(nPlusOneBeta,[6])
+      call ddnoMetaDataInts%put(nMinusOneAlpha,[7])
+      call ddnoMetaDataInts%put(nMinusOneBeta,[8])
 !
 !     If this is a DDNO job, calculate the overlap of the two determinants.
 !
@@ -811,7 +820,12 @@
         call GMatrixFileOut%writeArray2('BETA MO COEFFICIENTS',DDNOsBeta)
         call GMatrixFileOut%writeArray2('ALPHA SCF DENSITY MATRIX',PMatrixAlpha1,storage='l')
         call GMatrixFileOut%writeArray2('BETA SCF DENSITY MATRIX',PMatrixBeta1,storage='l')
-!hph        call GMatrixFileOut%writeArray2('BETA SCF DENSITY MATRIX',PMatrixBeta1)
+!
+!       DDNO metadata...
+        call GMatrixFileOut%writeArray2('DDNO Metadata Integers Labels',  &
+          ddnoMetaDataIntsLabels)
+        call GMatrixFileOut%writeArray2('DDNO Metadata Integers',  &
+          ddnoMetaDataInts)
 !
 !       Close out the matrix file.
         call GMatrixFileOut%closeFile()

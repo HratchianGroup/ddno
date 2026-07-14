@@ -27,6 +27,39 @@
       CONTAINS
 
 !
+!PROCEDURE ddnoMetaData
+      subroutine ddnoMetaData(ddnoMetaDataIntsLabels,ddnoMetaDataInts)
+!
+!     This routine is used to fill arrays of metadata integer labels and the
+!     metadata integer list.
+!
+!
+!     - H. P. Hratchian, 2026
+!
+!
+      implicit none
+      type(MQC_Variable)::ddnoMetaDataIntsLabels,ddnoMetaDataInts
+!
+!
+!     Write the array of integer labels.
+!
+      ddnoMetaDataIntsLabels = [character(len=32)::  &
+        'Version-Year',           &
+        'Version-Month',          &
+        'Version-Day',            &
+        'Version-Revision',       &
+        'No. Alpha Particle(s)',  &
+        'No. Beta Particle(s)',   &
+        'No. Alpha Hole(s)',      &
+        'No. Beta Hole(s)',       &
+        'Dyson orbital number' ]
+      ddnoMetaDataInts = [ 2025,10,23,0,0,0,0,0,0 ]
+!
+      return
+      end subroutine ddnoMetaData
+
+
+!
 !PROCEDURE determinantOverlap
       subroutine determinantOverlap(SMatrix,SMatrixMinusHalf,  &
         diffDensityEVals,diffDensityEVecs,CMOsKet,NOccKet,nBasis,  &

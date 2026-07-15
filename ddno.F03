@@ -68,7 +68,7 @@
 !     Format Statements
 !
  1000 Format(1x,'Enter Program DDNO'/,  &
-             1x,'Version 2025.10.23.00')
+             1x,'Version 2026.07.14.00')
  1010 Format(1x,'Matrix File 1:      ',A,/,  &
              1x,'Matrix File 2:      ',A,/,  &
              1x,'Output Matrix File: ',A,/)
@@ -826,6 +826,30 @@
           ddnoMetaDataIntsLabels)
         call GMatrixFileOut%writeArray2('DDNO Metadata Integers',  &
           ddnoMetaDataInts)
+        call diffDensityBetaEVals%print(iOut,header='beta eVals')
+        call diffDensityBetaEVecs%print(iOut,header='beta eVecs')
+!
+!       DDNO partiles and holes...
+        if(nPlusOneAlpha.gt.0) then
+          tmpMQCvar = getParticleHoleCoefficients(.true.,  &
+            nPlusOneAlpha,diffDensityAlphaEVals,diffDensityAlphaEVecs)
+          call GMatrixFileOut%writeArray2('DDNO Alpha Particles',tmpMQCvar)
+        endIf
+        if(nMinusOneAlpha.gt.0) then
+          tmpMQCvar = getParticleHoleCoefficients(.false.,  &
+            nMinusOneAlpha,diffDensityAlphaEVals,diffDensityAlphaEVecs)
+          call GMatrixFileOut%writeArray2('DDNO Alpha Holes',tmpMQCvar)
+        endIf
+        if(nPlusOneBeta.gt.0) then
+          tmpMQCvar = getParticleHoleCoefficients(.true.,  &
+            nPlusOneBeta,diffDensityBetaEVals,diffDensityBetaEVecs)
+          call GMatrixFileOut%writeArray2('DDNO Beta Particles',tmpMQCvar)
+        endIf
+        if(nMinusOneBeta.gt.0) then
+          tmpMQCvar = getParticleHoleCoefficients(.false.,  &
+            nMinusOneBeta,diffDensityBetaEVals,diffDensityBetaEVecs)
+          call GMatrixFileOut%writeArray2('DDNO Beta Holes',tmpMQCvar)
+        endIf
 !
 !       Close out the matrix file.
         call GMatrixFileOut%closeFile()

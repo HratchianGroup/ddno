@@ -44,16 +44,15 @@
 !     Write the array of integer labels.
 !
       ddnoMetaDataIntsLabels = [character(len=32)::  &
-        'Version-Year',           &
-        'Version-Month',          &
-        'Version-Day',            &
-        'Version-Revision',       &
-        'No. Alpha Particle(s)',  &
-        'No. Beta Particle(s)',   &
-        'No. Alpha Hole(s)',      &
-        'No. Beta Hole(s)',       &
-        'Dyson orbital number' ]
-      ddnoMetaDataInts = [ 2025,10,23,0,0,0,0,0,0 ]
+        '1. Version-Year',           &
+        '2. Version-Month',          &
+        '3. Version-Day',            &
+        '4. Version-Revision',       &
+        '5. No. Alpha Particle(s)',  &
+        '6. No. Beta Particle(s)',   &
+        '7. No. Alpha Hole(s)',      &
+        '8. No. Beta Hole(s)' ]
+      ddnoMetaDataInts = [ 2025,10,23,0,0,0,0,0 ]
 !
       return
       end subroutine ddnoMetaData
@@ -430,6 +429,75 @@
 !
       return
       end subroutine MO_partition
+
+
+      function getParticleHoleCoefficients(particleOrHole,  &
+        nParticlesHoles,diffDensityEVals,diffDensityEVecs) result(matrixOut)
+!
+!     This function returns the set of vectors corresponding to the particles or
+!     the holes, depending on the value of logical <particleOfHole>. When
+!     <particleOrHole> is TRUE, then the output <matrixOut> is filled with the
+!     set of particles; then <particleOfHole> is FALSE, then the output
+!     <matrixOut> is filled with the set of holes.
+!
+!
+!     H. P. Hratchian, 2026
+!
+!
+!     Variable Declarations
+!
+      implicit none
+      logical,intent(in)::particleOrHole
+      integer(kind=int64),intent(in)::nParticlesHoles
+      type(MQC_variable),intent(in)::diffDensityEVals,diffDensityEVecs
+      type(MQC_variable)::matrixOut
+!
+      integer(kind=int64)::i,j,nBasis,nBasisUse
+      real(kind=real64),dimension(:,:),allocatable::tmpMat
+!
+!
+!     Start by determining the number of basis functions and the number of
+!     vectors (nBasisUse). Then, allocate the intrinsic real tmpMatrix according
+!     to nParticlesHoles.
+!
+      nBasis    = Size(diffDensityEVecs,1)
+      nBasisUse = Size(diffDensityEVecs,2)
+      Allocate(tmpMat(nBasis,nParticlesHoles))
+!
+!     Walk through the sent eigenvalues to find the particles or holes, as
+!     requested by <particleOrHole>, and fill tmpMatrix with the corresponding
+!     vectors of AO coefficients.
+!
+      j = 0
+      if(particleOrHole) then
+        do i = 1,nBasisUse
+          if(float(diffDensityEVals%getVal([i])).gt.0.99) then
+            j = j+1
+            if(j.gt.nParticlesHoles)  &
+              call mqc_error('getParticlesHoles: j > nParticlesHoles')
+            tmpMat(:,j) = diffDensityEVecs%column(i)
+          endIf
+        endDo
+      else
+        do i = 1,nBasisUse
+          if(float(diffDensityEVals%getVal([i])).lt.-0.99) then
+            j = j+1
+            if(j.gt.nParticlesHoles)  &
+              call mqc_error('getParticlesHoles: j > nParticlesHoles')
+            tmpMat(:,j) = diffDensityEVecs%column(i)
+          endIf
+        endDo
+      endIf
+      if(j.ne.nParticlesHoles)  &
+        call mqc_error('getParticleHoleCoefficients: j.ne.nParticlesHoles')
+!
+!     Move tmpMat into matrixOut and then dealloate tmpMat.
+!
+      matrixOut = tmpMat
+      DeAllocate(tmpMat)
+!
+      return
+      end function getParticleHoleCoefficients
 
 
 !hph+

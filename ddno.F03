@@ -826,8 +826,6 @@
           ddnoMetaDataIntsLabels)
         call GMatrixFileOut%writeArray2('DDNO Metadata Integers',  &
           ddnoMetaDataInts)
-        call diffDensityBetaEVals%print(iOut,header='beta eVals')
-        call diffDensityBetaEVecs%print(iOut,header='beta eVecs')
 !
 !       DDNO partiles and holes...
         if(nPlusOneAlpha.gt.0) then

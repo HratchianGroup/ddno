@@ -37,8 +37,8 @@ ddno.exe
 ```
 
 The makefile defaults to `nvfortran`; switch `FC` to `gfortran` near the top of
-the makefile if that is your local compiler. DDNO currently checks for MQCPack
-version 25.9.0 or newer at runtime.
+the makefile if that is your local compiler. DDNO currently calls the MQCPack
+version check with its `newerThan*` components set to 26.7.1 at runtime.
 
 ---
 
@@ -85,7 +85,10 @@ formchk ddno_output.chk ddno_output.fchk
 
 You may then visualize the DDNOs using GaussView, iQMol, or another standard visualizer of your choice.
 
-The output FAF contains reordered DDNO orbitals, orbital-energy-like occupation-change eigenvalues, and the relevant copied basis/density metadata needed for visualization.
+The output FAF contains reordered DDNO orbitals, orbital-energy-like
+occupation-change eigenvalues, the relevant copied basis/density data needed
+for visualization, an eight-field integer DDNO metadata block, and separate
+spin-resolved particle/hole coefficient arrays when those blocks are nonempty.
 
 ### Example inputs and regression cases
 
@@ -127,12 +130,18 @@ In addition to DDNO and NIO analyses, the program also evaluates:
 * **Attachment/Detachment model** (Head‑Gordon and co‑workers), which partitions ΔP into attachment and detachment densities and reports the **promotion number**.
 * **Excitation Number model** (Gill and co‑workers), providing an alternative scalar measure of electron promotion.
 
-These analyses are automatically computed when the required conditions (electron‑conserving transitions for A/D and excitation‑number models) are satisfied.
+These density-based analyses are evaluated for every calculation that is
+successfully classified as DDNO or NIO detachment. Transition-dipole and
+oscillator-strength quantities are the later, DDNO-only branch.
 
-The program determines whether the initial and final states contain the same number of electrons:
+The program classifies the calculation from the numbers of near-`+1` and
+near-`-1` occupation-change eigenvalues:
 
-* If the electron count **is conserved**, DDNO performs the general **DDNO analysis**.
-* If the electron count **changes**, DDNO performs **NIO analysis**.
+* Equal particle and hole counts select the general **DDNO analysis**.
+* Fewer particles than holes select **NIO detachment analysis**.
+
+Electron-attachment cases with more particles than holes are not currently
+classified as NIO and terminate at the ambiguity check.
 
 This unified behavior replaces earlier workflows that required separate programs (`nio.exe`) for non-conserving transitions.
 

@@ -28,20 +28,23 @@
 
 !
 !PROCEDURE ddnoMetaData
-      subroutine ddnoMetaData(ddnoMetaDataIntsLabels,ddnoMetaDataInts)
+      subroutine ddnoMetaData(ddnoMetaDataIntsLabels,ddnoMetaDataInts,  &
+        ddnoMetaDataRealsLabels,ddnoMetaDataReals)
 !
-!     This routine is used to fill arrays of metadata integer labels and the
-!     metadata integer list.
+!     This routine is used to fill arrays of metadata integer and real labels
+!     and the metadata integer and real lists.
 !
 !
 !     - H. P. Hratchian, 2026
 !
 !
       implicit none
-      type(MQC_Variable)::ddnoMetaDataIntsLabels,ddnoMetaDataInts
+      type(MQC_Variable)::ddnoMetaDataIntsLabels,ddnoMetaDataInts,  &
+        ddnoMetaDataRealsLabels,ddnoMetaDataReals
 !
 !
-!     Write the array of integer labels.
+!     Write the arrays of integer labels and values (some of which are defaulted
+!     here).
 !
       ddnoMetaDataIntsLabels = [character(len=32)::  &
         '1. Version-Year',           &
@@ -53,6 +56,40 @@
         '7. No. Alpha Hole(s)',      &
         '8. No. Beta Hole(s)' ]
       ddnoMetaDataInts = [ 2025,10,23,0,0,0,0,0 ]
+!
+!     Write the arrays of real labels and values (some of which are defaulted
+!     here).
+!
+      ddnoMetaDataRealsLabels = [character(len=32)::  &
+        '1. Initial SCF Energy (au)',       &
+        '2. Final SCF Energy (au)',         &
+        '3. Initial Total Energy (au)',     &
+        '4. Final Total Energy (au)',       &
+        '5. Alpha Overlap Factor',          &
+        '6. Beta Overlap Factor',           &
+        '7. Combined Overlap Factor',       &
+        '8. HG Alpha Attachment Number',    &
+        '9. HG Alpha Detachment Number',    &
+        '10. HG Beta Attachment Number',    &
+        '11. HG Beta Detachment Number',    &
+        '12. Exc. No. Alpha VV Trace',      &
+        '13. Exc. No. Alpha OO Trace',      &
+        '14. Exc. No. Beta VV Trace',       &
+        '15. Exc. No. Beta OO Trace',       &
+        '16. Alpha Excitation OO Trace',    &
+        '17. Alpha Excitation VV Trace',    &
+        '18. Beta Excitation OO Trace',     &
+        '19. Beta Excitation VV Trace',     &
+        '20. Alpha Relaxation OO Trace',    &
+        '21. Alpha Relaxation VV Trace',    &
+        '22. Beta Relaxation OO Trace',     &
+        '23. Beta Relaxation VV Trace' ]
+      ddnoMetaDataReals = [  &
+        0.0_real64,0.0_real64,0.0_real64,0.0_real64,0.0_real64,  &
+        0.0_real64,0.0_real64,0.0_real64,0.0_real64,0.0_real64,  &
+        0.0_real64,0.0_real64,0.0_real64,0.0_real64,0.0_real64,  &
+        0.0_real64,0.0_real64,0.0_real64,0.0_real64,0.0_real64,  &
+        0.0_real64,0.0_real64,0.0_real64 ]
 !
       return
       end subroutine ddnoMetaData

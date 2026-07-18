@@ -32,7 +32,8 @@
         matrixFilenameOut
       type(mqc_gaussian_unformatted_matrix_file)::GMatrixFile1,  &
         GMatrixFile2,GMatrixFileOut
-      type(MQC_Variable)::ddnoMetaDataIntsLabels,ddnoMetaDataInts
+      type(MQC_Variable)::ddnoMetaDataIntsLabels,ddnoMetaDataInts,  &
+        ddnoMetaDataRealsLabels,ddnoMetaDataReals
       type(MQC_Variable)::DDNOsAlpha,DDNOsBeta,pDDNO,hDDNO,  &
         dipoleStrength,TDOverlapA,TDOverlapB,TDparticleHoleMag,  &
         oscillatorStrength
@@ -68,7 +69,7 @@
 !     Format Statements
 !
  1000 Format(1x,'Enter Program DDNO'/,  &
-             1x,'Version 2026.07.14.00')
+             1x,'Version 2026.07.17.00')
  1010 Format(1x,'Matrix File 1:      ',A,/,  &
              1x,'Matrix File 2:      ',A,/,  &
              1x,'Output Matrix File: ',A,/)
@@ -132,7 +133,8 @@
 !
 !     Set up the metadata arrays.
 !
-      call ddnoMetaData(ddnoMetaDataIntsLabels,ddnoMetaDataInts)
+      call ddnoMetaData(ddnoMetaDataIntsLabels,ddnoMetaDataInts,  &
+        ddnoMetaDataRealsLabels,ddnoMetaDataReals)
 !
 !     Open the Gaussian matrix file and load the number of atomic centers.
 !
@@ -324,6 +326,10 @@
         deltaTotalEnergy,deltaTotalEnergy*evPHartree,  &
         deltaTotalEnergy*cmM1PHartree,  &
         mqc_float(10000000)*(planck*sLight)/(deltaTotalEnergy*jPHartree)
+      call ddnoMetaDataReals%put(scfEnergy1,[1])
+      call ddnoMetaDataReals%put(scfEnergy2,[2])
+      call ddnoMetaDataReals%put(totalEnergy1,[3])
+      call ddnoMetaDataReals%put(totalEnergy2,[4])
 !
 !     Form the difference density and construct the DDNOs, which are NIOs in
 !     electron detachment cases.
@@ -432,6 +438,9 @@
         call mqc_error('Confused about NIO or DDNO job.')
       if(isNIO) write(iOut,1500) float(TDOverlapA*TDOverlapB),  &
         float(TDOverlapA),float(TDOverlapB)
+      call ddnoMetaDataReals%put(TDOverlapA,[5])
+      call ddnoMetaDataReals%put(TDOverlapB,[6])
+      call ddnoMetaDataReals%put(TDOverlapA*TDOverlapB,[7])
       call ddnoMetaDataInts%put(nPlusOneAlpha,[5])
       call ddnoMetaDataInts%put(nPlusOneBeta,[6])
       call ddnoMetaDataInts%put(nMinusOneAlpha,[7])
@@ -480,6 +489,10 @@
         float(attachmentNumberAlpha),  &
         float(detachmentNumberAlpha),float(attachmentNumberBeta),  &
         float(detachmentNumberBeta)
+      call ddnoMetaDataReals%put(attachmentNumberAlpha,[8])
+      call ddnoMetaDataReals%put(detachmentNumberAlpha,[9])
+      call ddnoMetaDataReals%put(attachmentNumberBeta,[10])
+      call ddnoMetaDataReals%put(detachmentNumberBeta,[11])
 !
 !     Evaluate the excitation number.
 !
@@ -496,6 +509,10 @@
         float(attachmentNumberAlpha),  &
         -float(detachmentNumberAlpha),float(attachmentNumberBeta),  &
         -float(detachmentNumberBeta)
+      call ddnoMetaDataReals%put(attachmentNumberAlpha,[12])
+      call ddnoMetaDataReals%put(detachmentNumberAlpha,[13])
+      call ddnoMetaDataReals%put(attachmentNumberBeta,[14])
+      call ddnoMetaDataReals%put(detachmentNumberBeta,[15])
 !
 !     Evaluate the Excitation/Relaxation model.
 !
@@ -533,6 +550,14 @@
         float(relaxationNumberBetaO2V),  &
         float(relaxationNumberBetaV2O),  &
         float(relaxationNumberAlphaV2O)+float(relaxationNumberBetaV2O)
+      call ddnoMetaDataReals%put(excitationNumberAlphaO2V,[16])
+      call ddnoMetaDataReals%put(excitationNumberAlphaV2O,[17])
+      call ddnoMetaDataReals%put(excitationNumberBetaO2V,[18])
+      call ddnoMetaDataReals%put(excitationNumberBetaV2O,[19])
+      call ddnoMetaDataReals%put(relaxationNumberAlphaO2V,[20])
+      call ddnoMetaDataReals%put(relaxationNumberAlphaV2O,[21])
+      call ddnoMetaDataReals%put(relaxationNumberBetaO2V,[22])
+      call ddnoMetaDataReals%put(relaxationNumberBetaV2O,[23])
 
 !hph+
 !!
@@ -813,7 +838,7 @@
           write(iOut,*)
         endIf
 !
-!       DDNO eigenvectors and eigenvalues...
+!       DDNO eigenvectors and eigenvalues written over the normal MO entries...
         call GMatrixFileOut%writeArray2('ALPHA ORBITAL ENERGIES',diffDensityAlphaEVals)
         call GMatrixFileOut%writeArray2('BETA ORBITAL ENERGIES',diffDensityBetaEVals)
         call GMatrixFileOut%writeArray2('ALPHA MO COEFFICIENTS',DDNOsAlpha)
@@ -826,6 +851,10 @@
           ddnoMetaDataIntsLabels)
         call GMatrixFileOut%writeArray2('DDNO Metadata Integers',  &
           ddnoMetaDataInts)
+        call GMatrixFileOut%writeArray2('DDNO Metadata Reals Labels',  &
+          ddnoMetaDataRealsLabels)
+        call GMatrixFileOut%writeArray2('DDNO Metadata Reals',  &
+          ddnoMetaDataReals)
 !
 !       DDNO partiles and holes...
         if(nPlusOneAlpha.gt.0) then

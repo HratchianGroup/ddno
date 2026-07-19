@@ -847,35 +847,35 @@
         call GMatrixFileOut%writeArray2('BETA SCF DENSITY MATRIX',PMatrixBeta1,storage='l')
 !
 !       DDNO metadata...
-        call GMatrixFileOut%writeArray2('DDNO Metadata Integers Labels',  &
+        call GMatrixFileOut%writeArray2('DDNO: Metadata Integers Labels',  &
           ddnoMetaDataIntsLabels)
-        call GMatrixFileOut%writeArray2('DDNO Metadata Integers',  &
+        call GMatrixFileOut%writeArray2('DDNO: Metadata Integers',  &
           ddnoMetaDataInts)
-        call GMatrixFileOut%writeArray2('DDNO Metadata Reals Labels',  &
+        call GMatrixFileOut%writeArray2('DDNO: Metadata Reals Labels',  &
           ddnoMetaDataRealsLabels)
-        call GMatrixFileOut%writeArray2('DDNO Metadata Reals',  &
+        call GMatrixFileOut%writeArray2('DDNO: Metadata Reals',  &
           ddnoMetaDataReals)
 !
 !       DDNO partiles and holes...
         if(nPlusOneAlpha.gt.0) then
           tmpMQCvar = getParticleHoleCoefficients(.true.,  &
             nPlusOneAlpha,diffDensityAlphaEVals,diffDensityAlphaEVecs)
-          call GMatrixFileOut%writeArray2('DDNO Alpha Particles',tmpMQCvar)
+          call GMatrixFileOut%writeArray2('DDNO: Alpha Particles',tmpMQCvar)
         endIf
         if(nMinusOneAlpha.gt.0) then
           tmpMQCvar = getParticleHoleCoefficients(.false.,  &
             nMinusOneAlpha,diffDensityAlphaEVals,diffDensityAlphaEVecs)
-          call GMatrixFileOut%writeArray2('DDNO Alpha Holes',tmpMQCvar)
+          call GMatrixFileOut%writeArray2('DDNO: Alpha Holes',tmpMQCvar)
         endIf
         if(nPlusOneBeta.gt.0) then
           tmpMQCvar = getParticleHoleCoefficients(.true.,  &
             nPlusOneBeta,diffDensityBetaEVals,diffDensityBetaEVecs)
-          call GMatrixFileOut%writeArray2('DDNO Beta Particles',tmpMQCvar)
+          call GMatrixFileOut%writeArray2('DDNO: Beta Particles',tmpMQCvar)
         endIf
         if(nMinusOneBeta.gt.0) then
           tmpMQCvar = getParticleHoleCoefficients(.false.,  &
             nMinusOneBeta,diffDensityBetaEVals,diffDensityBetaEVecs)
-          call GMatrixFileOut%writeArray2('DDNO Beta Holes',tmpMQCvar)
+          call GMatrixFileOut%writeArray2('DDNO: Beta Holes',tmpMQCvar)
         endIf
 !
 !       Close out the matrix file.

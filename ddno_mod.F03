@@ -55,7 +55,7 @@
         '6. No. Beta Particle(s)',   &
         '7. No. Alpha Hole(s)',      &
         '8. No. Beta Hole(s)' ]
-      ddnoMetaDataInts = [ 2025,10,23,0,0,0,0,0 ]
+      ddnoMetaDataInts = [ 2026,7,17,0,0,0,0,0 ]
 !
 !     Write the arrays of real labels and values (some of which are defaulted
 !     here).

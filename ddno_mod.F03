@@ -18,7 +18,7 @@
 !     Variable Declarations
 !
       implicit none
-      integer,parameter::IOut=6
+      integer,parameter::iOut=6
       logical::DEBUG=.false.
 !
 !

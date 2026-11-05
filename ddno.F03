@@ -69,7 +69,7 @@
 !     Format Statements
 !
  1000 Format(1x,'Enter Program DDNO'/,  &
-             1x,'Version 2026.07.17.00')
+             1x,'Version 2026.11.05.00')
  1010 Format(1x,'Matrix File 1:      ',A,/,  &
              1x,'Matrix File 2:      ',A,/,  &
              1x,'Output Matrix File: ',A,/)
@@ -781,7 +781,7 @@
         GMatrixFileOut = GMatrixFile1
         call GMatrixFileOut%create(TRIM(matrixFilenameOut))
 !
-!       Basis set info...
+!       Pull the basis set info and put it into the output FAF...
         call GMatrixFile1%getArray('SHELL TO ATOM MAP',mqcVarOut=tmpMQCvar)
         call GMatrixFileOut%writeArray2('SHELL TO ATOM MAP',tmpMQCvar)
         call GMatrixFile1%getArray('SHELL TYPES',mqcVarOut=tmpMQCvar)
@@ -797,9 +797,17 @@
         call GMatrixFile1%getArray('COORDINATES OF EACH SHELL',mqcVarOut=tmpMQCvar)
         call GMatrixFileOut%writeArray2('COORDINATES OF EACH SHELL',tmpMQCvar)
 !
+!       Look for an integration grid on one of the input FAFs and put it into
+!       the output FAF...
+        call GMatrixFile1%getArray('3D QUADRATURE GRID',  &
+          mqcVarOut=tmpMQCvar,foundOut=found)
+        if(.not.found) call GMatrixFile1%getArray('3D QUADRATURE GRID',  &
+          mqcVarOut=tmpMQCvar,foundOut=found)
+        if(found) call GMatrixFileOut%writeArray2('3D QUADRATURE GRID',  &
+          tmpMQCvar)
+!
 !       HPH -- Do a test to see if NBasis.ne.NBasisUse and then print out
 !       dimensions of the arrays being written in the lines below.
-!
         if(nBasis.ne.nBasisUse) then
           write(iOut,*)
           write(iOut,*)' nBasis != NBasisUse'

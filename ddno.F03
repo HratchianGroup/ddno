@@ -69,7 +69,7 @@
 !     Format Statements
 !
  1000 Format(1x,'Enter Program DDNO'/,  &
-             1x,'Version 2026.11.05.00')
+             1x,'Version 2026.11.05.01')
  1010 Format(1x,'Matrix File 1:      ',A,/,  &
              1x,'Matrix File 2:      ',A,/,  &
              1x,'Output Matrix File: ',A,/)
@@ -806,6 +806,9 @@
         if(found) call GMatrixFileOut%writeArray2('3D QUADRATURE GRID',  &
           tmpMQCvar)
 !
+!       Write the AO overlap matrix to the output FAF...
+        call GMatrixFileOut%writeArray2('Overlap',SMatrixAO)
+!
 !       HPH -- Do a test to see if NBasis.ne.NBasisUse and then print out
 !       dimensions of the arrays being written in the lines below.
         if(nBasis.ne.nBasisUse) then
@@ -864,25 +867,25 @@
         call GMatrixFileOut%writeArray2('DDNO: Metadata Reals',  &
           ddnoMetaDataReals)
 !
-!       DDNO partiles and holes...
+!       DDNO particles and holes...
         if(nPlusOneAlpha.gt.0) then
           tmpMQCvar = getParticleHoleCoefficients(.true.,  &
-            nPlusOneAlpha,diffDensityAlphaEVals,diffDensityAlphaEVecs)
+            nPlusOneAlpha,diffDensityAlphaEVals,DDNOsAlpha)
           call GMatrixFileOut%writeArray2('DDNO: Alpha Particles',tmpMQCvar)
         endIf
         if(nMinusOneAlpha.gt.0) then
           tmpMQCvar = getParticleHoleCoefficients(.false.,  &
-            nMinusOneAlpha,diffDensityAlphaEVals,diffDensityAlphaEVecs)
+            nMinusOneAlpha,diffDensityAlphaEVals,DDNOsAlpha)
           call GMatrixFileOut%writeArray2('DDNO: Alpha Holes',tmpMQCvar)
         endIf
         if(nPlusOneBeta.gt.0) then
           tmpMQCvar = getParticleHoleCoefficients(.true.,  &
-            nPlusOneBeta,diffDensityBetaEVals,diffDensityBetaEVecs)
+            nPlusOneBeta,diffDensityBetaEVals,DDNOsBeta)
           call GMatrixFileOut%writeArray2('DDNO: Beta Particles',tmpMQCvar)
         endIf
         if(nMinusOneBeta.gt.0) then
           tmpMQCvar = getParticleHoleCoefficients(.false.,  &
-            nMinusOneBeta,diffDensityBetaEVals,diffDensityBetaEVecs)
+            nMinusOneBeta,diffDensityBetaEVals,DDNOsBeta)
           call GMatrixFileOut%writeArray2('DDNO: Beta Holes',tmpMQCvar)
         endIf
 !

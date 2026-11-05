@@ -490,6 +490,7 @@
       type(MQC_variable)::matrixOut
 !
       integer(kind=int64)::i,j,nBasis,nBasisUse
+      real(kind=real64),dimension(:),allocatable::tmpVec
       real(kind=real64),dimension(:,:),allocatable::tmpMat
 !
 !
@@ -528,10 +529,18 @@
       if(j.ne.nParticlesHoles)  &
         call mqc_error('getParticleHoleCoefficients: j.ne.nParticlesHoles')
 !
-!     Move tmpMat into matrixOut and then dealloate tmpMat.
+!     Check to see if the output should be a vector or a matrix. Then put the
+!     correct result in the matrixOut MQC variable.
 !
-      matrixOut = tmpMat
-      DeAllocate(tmpMat)
+      if(nParticlesHoles.eq.1) then
+        tmpVec = tmpMat(:,1)
+        matrixOut = tmpVec
+        DeAllocate(tmpvec)
+        DeAllocate(tmpMat)
+      else
+        matrixOut = tmpMat
+        DeAllocate(tmpMat)
+      endIf
 !
       return
       end function getParticleHoleCoefficients
